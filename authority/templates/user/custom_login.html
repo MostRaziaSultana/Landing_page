@@ -90,23 +90,29 @@
     <div class="container">
         <div class="card">
             <div class="card-header">
-
-                    {% if logosettings.adminlogin_logo %}
-                        <img src="{{ logosettings.adminlogin_logo.url }}" alt="Admin Login Logo" style="height:60px;width:200px;">
-                    {% else %}
-                        <h2>Login</h2> <!-- Fallback text in case the logo is not available -->
-                    {% endif %}
+                         <img src="{{ frontend_setting.logo.url }}" alt="Logo" style="max-height: 50px;">
 
             </div>
             <div class="card-body">
                 <!-- Display error messages -->
-                {% if messages %}
-                    <div class="alert">
-                        {% for message in messages %}
-                            <p>{{ message }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+{% if messages %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        {% for message in messages %}
+            Swal.fire({
+                icon: "{{ message.tags|default:'info' }}",  // Message tags determine the icon: success, error, warning, etc.
+                title: "{{ message }}",  // Message content
+                confirmButtonText: "OK",  // OK button text
+                confirmButtonColor: "#6C63FF",  // Custom button color
+                timer: 3000,  // Auto-close after 3 seconds
+                showClass: { popup: '' },  // Remove show animation
+                hideClass: { popup: '' }   // Remove hide animation
+            });
+        {% endfor %}
+    });
+</script>
+{% endif %}
 
                 <form method="post" novalidate>
                     {% csrf_token %}
